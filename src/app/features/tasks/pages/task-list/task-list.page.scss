@@ -1,0 +1,16 @@
+// Styles pour la page de liste des tâches
+ion-item {
+  --padding-start: 8px;
+  --inner-padding-end: 8px;
+  margin: 8px;
+  border-radius: 8px;
+  
+  &:hover {
+    --background: var(--ion-color-light-shade);
+  }
+}
+
+ion-badge {
+  padding: 8px;
+  border-radius: 4px;
+}

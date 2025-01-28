@@ -1,0 +1,14 @@
+// Styles pour la page d'ajout de tâche
+ion-item {
+  --padding-start: 8px;
+  --inner-padding-end: 8px;
+  margin: 8px;
+  
+  ion-label {
+    margin-bottom: 8px;
+  }
+}
+
+ion-datetime {
+  --background: var(--ion-color-light);
+}

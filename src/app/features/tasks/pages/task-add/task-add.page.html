@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Nouvelle tâche</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Titre</ion-label>
+      <ion-input [(ngModel)]="task.title" placeholder="Entrez un titre"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="stacked">Description</ion-label>
+      <ion-textarea [(ngModel)]="task.description" placeholder="Description de la tâche"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Importance</ion-label>
+      <ion-select [(ngModel)]="task.importance" interface="action-sheet">
+        <ion-select-option value="low">Basse</ion-select-option>
+        <ion-select-option value="medium">Moyenne</ion-select-option>
+        <ion-select-option value="high">Haute</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Date d'échéance</ion-label>
+      <ion-datetime-button datetime="dueDate"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime 
+            id="dueDate" 
+            [(ngModel)]="task.dueDate"
+            presentation="date"
+            locale="fr-FR">
+          </ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+  </ion-list>
+
+  <div class="ion-padding">
+    <ion-button expand="block" (click)="onSubmit()">
+      Ajouter
+    </ion-button>
+  </div>
+</ion-content>
