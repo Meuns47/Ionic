@@ -3,6 +3,8 @@ import { Task, TaskStatus } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { 
   IonHeader, 
@@ -30,24 +32,14 @@ import { add, create, trash } from 'ionicons/icons';
   standalone: true,
   imports: [
     CommonModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonList,
-    IonItemSliding,
-    IonItem,
-    IonLabel,
-    IonChip,
-    IonIcon,
-    IonButton,
-    IonButtons,
-    IonNote
+    IonicModule,
+    RouterModule
   ]
 })
 export class TaskListPage implements OnInit, OnDestroy {
   tasks: Task[] = [];
   private tasksUpdateHandler = () => this.loadTasks();
+  currentTab = 'all';
 
   constructor(
     private taskService: TaskService,
@@ -162,5 +154,11 @@ export class TaskListPage implements OnInit, OnDestroy {
       await this.toastService.showError('Erreur lors de la suppression de la tâche');
       await this.loadTasks();
     }
+  }
+
+  onTabChange(event: any) {
+    const tab = event.detail.value;
+    this.currentTab = tab;
+    this.router.navigate(['tasks', tab]);
   }
 }

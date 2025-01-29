@@ -1,43 +1,30 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>Liste des tâches</ion-title>
+    <ion-title>Mes tâches</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="addTask()">
+      <ion-button routerLink="add">
         <ion-icon name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [value]="currentTab" (ionChange)="onTabChange($event)">
+      <ion-segment-button value="all">
+        <ion-label>Toutes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="todo">
+        <ion-label>À faire</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="in-progress">
+        <ion-label>En cours</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="completed">
+        <ion-label>Terminé</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item-sliding *ngFor="let task of tasks">
-      <ion-item>
-        <ion-chip [color]="getStatusColor(task.status)" slot="start">
-          {{ getStatusLabel(task.status) }}
-        </ion-chip>
-        
-        <ion-label>
-          <h2>{{ task.title }}</h2>
-          <p>{{ task.description }}</p>
-          <ion-note>
-            <ion-chip [color]="getImportanceColor(task.importance)" size="small">
-              {{ getImportanceLabel(task.importance) }}
-            </ion-chip>
-            <br>
-            Date limite: {{ task.dueDate | date:'short' }}
-          </ion-note>
-        </ion-label>
-
-        <ion-buttons slot="end">
-          <ion-button (click)="editTask(task.id!)" color="primary">
-            <ion-icon name="create"></ion-icon>
-          </ion-button>
-          <ion-button (click)="confirmDelete(task.id!)" color="danger">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
-    </ion-item-sliding>
-  </ion-list>
+<ion-content>
+  <ion-router-outlet></ion-router-outlet>
 </ion-content>
