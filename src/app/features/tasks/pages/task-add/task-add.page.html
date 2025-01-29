@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Nouvelle tâche</ion-title>
+    <ion-title>{{ isEditing ? 'Modifier la tâche' : 'Nouvelle tâche' }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
         <ion-icon name="close"></ion-icon>
@@ -47,8 +47,8 @@
   </ion-list>
 
   <div class="ion-padding">
-    <ion-button expand="block" (click)="onSubmit()">
-      Ajouter
+    <ion-button expand="block" (click)="onSubmit()" [color]="isEditing ? 'warning' : 'primary'">
+      {{ isEditing ? 'Modifier' : 'Ajouter' }}
     </ion-button>
   </div>
 </ion-content>

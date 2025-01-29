@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { TaskAddPage } from '../task-add/task-add.page';
-import { TaskService } from '../../../../core/services/task.service';
+import { TaskService } from '../../services/task.service';
 import { Task } from '../../../../models/task.model';
 
 @Component({
@@ -31,9 +31,9 @@ export class TaskListPage implements OnInit {
       cssClass: 'my-custom-modal'
     });
     
-    modal.onDidDismiss().then((result) => {
+    modal.onDidDismiss().then(async (result) => {
       if (result.data?.task) {
-        this.taskService.addTask(result.data.task);
+        await this.taskService.addTask(result.data.task);
       }
     });
 
@@ -50,9 +50,9 @@ export class TaskListPage implements OnInit {
       }
     });
     
-    modal.onDidDismiss().then((result) => {
+    modal.onDidDismiss().then(async (result) => {
       if (result.data?.task && task.id !== undefined) {
-        this.taskService.updateTask(task.id, result.data.task);
+        await this.taskService.updateTask(task.id, result.data.task);
       }
     });
 
@@ -82,9 +82,9 @@ export class TaskListPage implements OnInit {
         },
         {
           text: 'Supprimer',
-          handler: () => {
+          handler: async () => {
             if (task.id !== undefined) {
-              this.taskService.deleteTask(task.id);
+              await this.taskService.deleteTask(task.id);
             }
           }
         }
