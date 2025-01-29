@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { TaskAddPage } from '../task-add/task-add.page';
 import { TaskService } from '../../../../core/services/task.service';
-import { Task } from '../../../../core/models/task.model';
+import { Task } from '../../../../models/task.model';
 
 @Component({
   selector: 'app-task-list',
@@ -31,11 +31,43 @@ export class TaskListPage implements OnInit {
       cssClass: 'my-custom-modal'
     });
     
-    await modal.present();
+    modal.onDidDismiss().then((result) => {
+      if (result.data?.task) {
+        this.taskService.addTask(result.data.task);
+      }
+    });
 
-    const { data } = await modal.onWillDismiss();
-    if (data?.task) {
-      this.taskService.addTask(data.task);
+    return await modal.present();
+  }
+
+  async editTask(task: Task) {
+    const modal = await this.modalController.create({
+      component: TaskAddPage,
+      cssClass: 'my-custom-modal',
+      componentProps: {
+        isEditing: true,
+        taskToEdit: { ...task }
+      }
+    });
+    
+    modal.onDidDismiss().then((result) => {
+      if (result.data?.task && task.id !== undefined) {
+        this.taskService.updateTask(task.id, result.data.task);
+      }
+    });
+
+    return await modal.present();
+  }
+
+  getImportanceColor(importance: Task['importance']): string {
+    switch (importance) {
+      case 'high':
+        return 'danger';
+      case 'medium':
+        return 'warning';
+      case 'low':
+      default:
+        return 'success';
     }
   }
 
@@ -51,24 +83,13 @@ export class TaskListPage implements OnInit {
         {
           text: 'Supprimer',
           handler: () => {
-            this.taskService.deleteTask(task.id);
+            if (task.id !== undefined) {
+              this.taskService.deleteTask(task.id);
+            }
           }
         }
       ]
     });
     await alert.present();
-  }
-
-  getImportanceColor(importance: string): string {
-    switch (importance) {
-      case 'high': return 'danger';
-      case 'medium': return 'warning';
-      case 'low': return 'success';
-      default: return 'medium';
-    }
-  }
-
-  updateTaskCompletion(task: Task) {
-    this.taskService.updateTaskCompletion(task.id, task.completed);
   }
 }

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Task } from '../../../../core/models/task.model';
+import { Task } from '../../../../models/task.model';
 
 @Component({
   selector: 'app-task-add',
@@ -8,15 +8,25 @@ import { Task } from '../../../../core/models/task.model';
   styleUrls: ['./task-add.page.scss'],
   standalone: false
 })
-export class TaskAddPage {
+export class TaskAddPage implements OnInit {
+  @Input() isEditing = false;
+  @Input() taskToEdit?: Task;
+
   task: Partial<Task> = {
     title: '',
     description: '',
-    importance: 'medium',
-    dueDate: new Date().toISOString()
+    importance: 'low',
+    dueDate: new Date().toISOString(),
+    completed: false
   };
 
   constructor(private modalController: ModalController) {}
+
+  ngOnInit() {
+    if (this.isEditing && this.taskToEdit) {
+      this.task = { ...this.taskToEdit };
+    }
+  }
 
   onSubmit() {
     if (this.task.title?.trim()) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Task } from '../models/task.model';
+import { Task } from '../../models/task.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +22,28 @@ export class TaskService {
   /**
    * Ajoute une nouvelle tâche
    */
-  addTask(task: Omit<Task, 'id' | 'completed'>): void {
+  addTask(task: Omit<Task, 'id'>): void {
     const newTask: Task = {
       id: this.nextId++,
-      completed: false,
       ...task
     };
     this.tasks.unshift(newTask);
     this.tasksSubject.next([...this.tasks]);
+  }
+
+  /**
+   * Met à jour une tâche
+   */
+  updateTask(taskId: number, updatedTask: Partial<Omit<Task, 'id'>>): void {
+    const taskIndex = this.tasks.findIndex(t => t.id === taskId);
+    if (taskIndex !== -1) {
+      this.tasks[taskIndex] = {
+        ...this.tasks[taskIndex],
+        ...updatedTask,
+        id: taskId
+      };
+      this.tasksSubject.next([...this.tasks]);
+    }
   }
 
   /**
@@ -38,16 +52,5 @@ export class TaskService {
   deleteTask(taskId: number): void {
     this.tasks = this.tasks.filter(task => task.id !== taskId);
     this.tasksSubject.next([...this.tasks]);
-  }
-
-  /**
-   * Met à jour l'état de complétion d'une tâche
-   */
-  updateTaskCompletion(taskId: number, completed: boolean): void {
-    const task = this.tasks.find(t => t.id === taskId);
-    if (task) {
-      task.completed = completed;
-      this.tasksSubject.next([...this.tasks]);
-    }
   }
 }

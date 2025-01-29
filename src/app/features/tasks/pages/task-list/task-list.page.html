@@ -11,33 +11,26 @@
 
 <ion-content>
   <ion-list>
-    <ion-item-sliding *ngFor="let task of tasks">
-      <ion-item>
-        <ion-checkbox 
-          slot="start" 
-          [(ngModel)]="task.completed"
-          (ionChange)="updateTaskCompletion(task)">
-        </ion-checkbox>
-        <ion-label>
-          <h2>{{ task.title }}</h2>
-          <p>{{ task.description }}</p>
-          <p *ngIf="task.dueDate" class="ion-text-sm">
-            <ion-text color="medium">
-              Échéance: {{ task.dueDate | date:'dd/MM/yyyy' }}
-            </ion-text>
-          </p>
-        </ion-label>
-        <ion-badge slot="end" [color]="getImportanceColor(task.importance)">
-          {{ task.importance }}
-        </ion-badge>
-      </ion-item>
-
-      <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="deleteTask(task)">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+    <ion-item *ngFor="let task of tasks">
+      <ion-label>
+        <h2>{{ task.title }}</h2>
+        <p>{{ task.description }}</p>
+        <p *ngIf="task.dueDate" class="ion-text-sm">
+          <ion-text color="medium">
+            Échéance: {{ task.dueDate | date:'dd/MM/yyyy' }}
+          </ion-text>
+        </p>
+      </ion-label>
+      <ion-button fill="clear" slot="end" (click)="deleteTask(task)">
+        <ion-icon name="trash-outline" color="danger"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" slot="end" (click)="editTask(task)">
+        <ion-icon name="create-outline" color="primary"></ion-icon>
+      </ion-button>
+      <ion-badge slot="end" [color]="getImportanceColor(task.importance)">
+        {{ task.importance }}
+      </ion-badge>
+    </ion-item>
 
     <ion-item *ngIf="tasks.length === 0">
       <ion-label class="ion-text-center">
