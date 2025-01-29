@@ -1,41 +1,43 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Mes Tâches</ion-title>
+    <ion-title>Liste des tâches</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="openAddTaskModal()">
+      <ion-button (click)="addTask()">
         <ion-icon name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
   <ion-list>
-    <ion-item *ngFor="let task of tasks">
-      <ion-label>
-        <h2>{{ task.title }}</h2>
-        <p>{{ task.description }}</p>
-        <p *ngIf="task.dueDate" class="ion-text-sm">
-          <ion-text color="medium">
-            Échéance: {{ task.dueDate | date:'dd/MM/yyyy' }}
-          </ion-text>
-        </p>
-      </ion-label>
-      <ion-button fill="clear" slot="end" (click)="deleteTask(task)">
-        <ion-icon name="trash-outline" color="danger"></ion-icon>
-      </ion-button>
-      <ion-button fill="clear" slot="end" (click)="editTask(task)">
-        <ion-icon name="create-outline" color="primary"></ion-icon>
-      </ion-button>
-      <ion-badge slot="end" [color]="getImportanceColor(task.importance)">
-        {{ task.importance }}
-      </ion-badge>
-    </ion-item>
+    <ion-item-sliding *ngFor="let task of tasks">
+      <ion-item>
+        <ion-chip [color]="getStatusColor(task.status)" slot="start">
+          {{ getStatusLabel(task.status) }}
+        </ion-chip>
+        
+        <ion-label>
+          <h2>{{ task.title }}</h2>
+          <p>{{ task.description }}</p>
+          <ion-note>
+            <ion-chip [color]="getImportanceColor(task.importance)" size="small">
+              {{ getImportanceLabel(task.importance) }}
+            </ion-chip>
+            <br>
+            Date limite: {{ task.dueDate | date:'short' }}
+          </ion-note>
+        </ion-label>
 
-    <ion-item *ngIf="tasks.length === 0">
-      <ion-label class="ion-text-center">
-        Aucune tâche pour le moment
-      </ion-label>
-    </ion-item>
+        <ion-buttons slot="end">
+          <ion-button (click)="editTask(task.id!)" color="primary">
+            <ion-icon name="create"></ion-icon>
+          </ion-button>
+          <ion-button (click)="confirmDelete(task.id!)" color="danger">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-item-sliding>
   </ion-list>
 </ion-content>

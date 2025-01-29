@@ -1,54 +1,75 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ isEditing ? 'Modifier la tâche' : 'Nouvelle tâche' }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="cancel()">
-        <ion-icon name="close"></ion-icon>
-      </ion-button>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tasks"></ion-back-button>
     </ion-buttons>
+    <ion-title>{{ isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-label position="stacked">Titre</ion-label>
-      <ion-input [(ngModel)]="task.title" placeholder="Entrez un titre"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-label position="stacked">Description</ion-label>
-      <ion-textarea [(ngModel)]="task.description" placeholder="Description de la tâche"></ion-textarea>
-    </ion-item>
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Titre *</ion-label>
+        <ion-input formControlName="title" type="text" placeholder="Entrez le titre"></ion-input>
+        <ion-note color="danger" *ngIf="taskForm.get('title')?.touched && taskForm.get('title')?.invalid">
+          {{ getErrorMessage('title') }}
+        </ion-note>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Importance</ion-label>
-      <ion-select [(ngModel)]="task.importance" interface="action-sheet">
-        <ion-select-option value="low">Basse</ion-select-option>
-        <ion-select-option value="medium">Moyenne</ion-select-option>
-        <ion-select-option value="high">Haute</ion-select-option>
-      </ion-select>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Description</ion-label>
+        <ion-textarea formControlName="description" placeholder="Entrez la description"></ion-textarea>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Date d'échéance</ion-label>
-      <ion-datetime-button datetime="dueDate"></ion-datetime-button>
-      <ion-modal [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime 
-            id="dueDate" 
-            [(ngModel)]="task.dueDate"
-            presentation="date"
-            locale="fr-FR">
-          </ion-datetime>
-        </ng-template>
-      </ion-modal>
-    </ion-item>
-  </ion-list>
+      <ion-item>
+        <ion-label position="stacked">Date limite</ion-label>
+        <ion-datetime-button datetime="dueDate"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime 
+              id="dueDate"
+              formControlName="dueDate"
+              presentation="date"
+              [showDefaultButtons]="true"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
 
-  <div class="ion-padding">
-    <ion-button expand="block" (click)="onSubmit()" [color]="isEditing ? 'warning' : 'primary'">
-      {{ isEditing ? 'Modifier' : 'Ajouter' }}
-    </ion-button>
-  </div>
+      <ion-item>
+        <ion-label position="stacked">Statut *</ion-label>
+        <ion-select formControlName="status" placeholder="Sélectionnez le statut">
+          <ion-select-option *ngFor="let option of statusOptions" [value]="option.value">
+            {{ option.label }}
+          </ion-select-option>
+        </ion-select>
+        <ion-note color="danger" *ngIf="taskForm.get('status')?.touched && taskForm.get('status')?.invalid">
+          {{ getErrorMessage('status') }}
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Importance *</ion-label>
+        <ion-select formControlName="importance" placeholder="Sélectionnez l'importance">
+          <ion-select-option *ngFor="let option of importanceOptions" [value]="option.value">
+            {{ option.label }}
+          </ion-select-option>
+        </ion-select>
+        <ion-note color="danger" *ngIf="taskForm.get('importance')?.touched && taskForm.get('importance')?.invalid">
+          {{ getErrorMessage('importance') }}
+        </ion-note>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding">
+      <ion-button expand="block" type="submit" [disabled]="taskForm.invalid">
+        {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+      </ion-button>
+      <ion-button expand="block" fill="clear" (click)="cancel()">
+        Annuler
+      </ion-button>
+    </div>
+  </form>
 </ion-content>

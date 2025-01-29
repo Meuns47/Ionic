@@ -1,16 +1,32 @@
-// Styles pour la page de liste des tâches
-ion-item {
-  --padding-start: 8px;
-  --inner-padding-end: 8px;
-  margin: 8px;
-  border-radius: 8px;
-  
-  &:hover {
-    --background: var(--ion-color-light-shade);
-  }
+.completed {
+  text-decoration: line-through;
+  color: var(--ion-color-medium);
 }
 
-ion-badge {
-  padding: 8px;
-  border-radius: 4px;
+ion-item {
+  --padding-start: 0;
+  margin-bottom: 8px;
+}
+
+ion-item-sliding {
+  margin-bottom: 4px;
+}
+
+ion-checkbox {
+  margin-right: 16px;
+}
+
+ion-chip {
+  margin-left: 16px;
+}
+
+ion-note {
+  font-size: 0.8em;
+  margin-top: 8px;
+  display: block;
+}
+
+h2 {
+  margin: 0;
+  font-weight: 500;
 }
