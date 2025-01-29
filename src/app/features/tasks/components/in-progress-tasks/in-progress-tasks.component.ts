@@ -2,20 +2,20 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
-import { TaskService } from '../services/task.service';
-import { Task } from '../models/task.model';
-import { ToastService } from '../../../core/services/toast.service';
+import { TaskService } from '../../services/task.service';
+import { Task } from '../../models/task.model';
+import { ToastService } from '../../../../core/services/toast.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-all-tasks',
-  templateUrl: './all-tasks.component.html',
-  styleUrls: ['./all-tasks.component.scss'],
+  selector: 'app-in-progress-tasks',
+  templateUrl: './in-progress-tasks.component.html',
+  styleUrls: ['./in-progress-tasks.component.scss'],
   standalone: true,
   imports: [CommonModule, IonicModule, RouterModule]
 })
-export class AllTasksComponent implements OnInit, OnDestroy {
+export class InProgressTasksComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
   private tasksSubscription?: Subscription;
 
@@ -39,6 +39,7 @@ export class AllTasksComponent implements OnInit, OnDestroy {
 
   async loadTasks() {
     this.tasks = await this.taskService.getTasks();
+    this.tasks = this.tasks.filter(task => task.status === 'in_progress');
   }
 
   getImportanceLabel(importance?: string): string {
@@ -47,32 +48,6 @@ export class AllTasksComponent implements OnInit, OnDestroy {
 
   getImportanceColor(importance?: string): string {
     return this.taskService.getImportanceColor(importance);
-  }
-
-  getStatusLabel(status: string): string {
-    switch (status) {
-      case 'todo':
-        return 'À faire';
-      case 'in_progress':
-        return 'En cours';
-      case 'done':
-        return 'Terminé';
-      default:
-        return status;
-    }
-  }
-
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'todo':
-        return 'primary';
-      case 'in_progress':
-        return 'warning';
-      case 'done':
-        return 'success';
-      default:
-        return 'medium';
-    }
   }
 
   editTask(id: number) {

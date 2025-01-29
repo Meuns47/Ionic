@@ -2,20 +2,20 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
-import { TaskService } from '../services/task.service';
-import { Task } from '../models/task.model';
-import { ToastService } from '../../../core/services/toast.service';
+import { TaskService } from '../../services/task.service';
+import { Task } from '../../models/task.model';
+import { ToastService } from '../../../../core/services/toast.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-todo-tasks',
-  templateUrl: './todo-tasks.component.html',
-  styleUrls: ['./todo-tasks.component.scss'],
+  selector: 'app-completed-tasks',
+  templateUrl: './completed-tasks.component.html',
+  styleUrls: ['./completed-tasks.component.scss'],
   standalone: true,
   imports: [CommonModule, IonicModule, RouterModule]
 })
-export class TodoTasksComponent implements OnInit, OnDestroy {
+export class CompletedTasksComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
   private tasksSubscription?: Subscription;
 
@@ -39,7 +39,7 @@ export class TodoTasksComponent implements OnInit, OnDestroy {
 
   async loadTasks() {
     this.tasks = await this.taskService.getTasks();
-    this.tasks = this.tasks.filter(task => task.status === 'todo');
+    this.tasks = this.tasks.filter(task => task.status === 'done');
   }
 
   getImportanceLabel(importance?: string): string {
