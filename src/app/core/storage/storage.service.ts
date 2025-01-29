@@ -33,43 +33,44 @@ export class StorageService {
     }
   }
 
-  // Stocker une donnée
-  public async set(key: string, value: any) {
+  public async set(key: string, value: any): Promise<any> {
     await this.init();
     const result = await this._storage?.set(key, value);
     console.log(`Data saved for key "${key}"`, value);
     return result;
   }
 
-  // Récupérer une donnée
-  public async get(key: string) {
+  public async get(key: string): Promise<any> {
     await this.init();
     const value = await this._storage?.get(key);
     console.log(`Data retrieved for key "${key}":`, value);
     return value;
   }
 
-  // Supprimer une donnée
-  public async remove(key: string) {
+  public async remove(key: string): Promise<any> {
     await this.init();
     const result = await this._storage?.remove(key);
     console.log(`Data removed for key "${key}"`);
     return result;
   }
 
-  // Supprimer toutes les données
-  public async clear() {
+  public async clear(): Promise<void> {
     await this.init();
-    const result = await this._storage?.clear();
-    console.log('All data cleared from storage');
-    return result;
+    await this._storage?.clear();
+    console.log('Storage cleared');
   }
 
-  // Récupérer toutes les clés
-  public async keys() {
+  public async keys(): Promise<string[]> {
     await this.init();
-    const keys = await this._storage?.keys();
-    console.log('All storage keys:', keys);
+    const keys = await this._storage?.keys() || [];
+    console.log('Storage keys:', keys);
     return keys;
+  }
+
+  public async length(): Promise<number> {
+    await this.init();
+    const length = await this._storage?.length() || 0;
+    console.log('Storage length:', length);
+    return length;
   }
 }

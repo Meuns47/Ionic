@@ -1,14 +1,46 @@
-// Styles pour la page d'ajout de tâche
 ion-item {
-  --padding-start: 8px;
-  --inner-padding-end: 8px;
-  margin: 8px;
-  
-  ion-label {
-    margin-bottom: 8px;
-  }
+  margin-bottom: 8px;
 }
 
 ion-datetime {
   --background: var(--ion-color-light);
+}
+
+ion-checkbox {
+  margin-right: 16px;
+}
+
+.validation-error {
+  padding: 0 16px;
+  margin-bottom: 16px;
+  font-size: 0.8em;
+}
+
+form {
+  height: 100%;
+}
+
+// Styles pour les états de validation
+.ion-valid {
+  --highlight-background: var(--ion-color-success);
+}
+
+.ion-invalid {
+  --highlight-background: var(--ion-color-danger);
+}
+
+// Animation pour les messages d'erreur
+.validation-error {
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
